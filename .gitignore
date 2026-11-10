@@ -1,0 +1,23 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# dbt build output
+dbt_brokerage/target/
+dbt_brokerage/dbt_packages/
+dbt_brokerage/logs/
+
+# Local data (raw Tiingo prices may not be redistributed)
+data/
+*.parquet
+*.csv.gz
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
