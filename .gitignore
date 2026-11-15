@@ -22,3 +22,4 @@ data/
 .vscode/
 .idea/
 local_notebook
+.user.yml
