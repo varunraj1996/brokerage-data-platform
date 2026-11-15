@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: dim_advisor
+    description: "Advisors. Grain: one row per advisor. SCD1."
+    columns:
+      - name: advisor_sk
+        data_tests: [unique, not_null]
+      - name: advisor_id
+        data_tests: [unique, not_null]
+
+  - name: dim_client
+    description: "Clients. Grain: one row per client (current version; SCD2 from slice 3)."
+    columns:
+      - name: client_sk
+        data_tests: [unique, not_null]
+      - name: client_id
+        data_tests: [unique, not_null]
+      - name: advisor_id
+        data_tests:
+          - not_null
+          - relationships:              # every client has a real advisor
+              arguments:
+                to: ref('dim_advisor')
+                field: advisor_id
+      - name: age_years
+        data_tests:
+          - dbt_utils.accepted_range:   # plausible ages; outliers are worth a look, not a failure
+              arguments:
+                min_value: 18
+                max_value: 110
+              config:
+                severity: warn
+
+  - name: dim_account
+    description: "Accounts. Grain: one row per account."
+    columns:
+      - name: account_sk
+        data_tests: [unique, not_null]
+      - name: account_id
+        data_tests: [unique, not_null]
+      - name: client_id
+        data_tests:
+          - not_null
+          - relationships:              # every account belongs to a real client
+              arguments:
+                to: ref('dim_client')
+                field: client_id
+      - name: account_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Open', 'Closed']

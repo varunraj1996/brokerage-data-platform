@@ -18,6 +18,7 @@
 dbutils.widgets.dropdown("env", "dev", ["dev", "prod"], "Environment")
 ENV = dbutils.widgets.get("env")
 SECRET_SCOPE = f"brokerage-{ENV}"
+CATALOG = f"brokerage_{ENV}"          # Unity Catalog catalog for this environment, e.g. brokerage_dev
 
 # COMMAND ----------
 
@@ -48,7 +49,4 @@ def jdbc_options(cfg: dict) -> dict:
 
 SQL = sql_config()
 JDBC = jdbc_options(SQL)
-print(f"Environment: {ENV} · secret scope: {SECRET_SCOPE} · database: {SQL['database']}")
-
-# COMMAND ----------
-
+print(f"Environment: {ENV} · secret scope: {SECRET_SCOPE} · catalog: {CATALOG}")

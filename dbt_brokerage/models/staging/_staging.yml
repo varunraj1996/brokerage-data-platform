@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: stg_advisors
+    description: One row per advisor.
+    columns:
+      - name: advisor_id
+        data_tests: [unique, not_null]
+
+  - name: stg_clients
+    description: One row per client (current version).
+    columns:
+      - name: client_id
+        data_tests: [unique, not_null]
+      - name: risk_profile
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Conservative', 'Moderate', 'Aggressive']
+      - name: segment
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Mass', 'Affluent', 'HNW']
+
+  - name: stg_accounts
+    description: One row per account.
+    columns:
+      - name: account_id
+        data_tests: [unique, not_null]
+      - name: account_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Individual', 'Joint', 'IRA', 'Roth IRA']
