@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: silver
+    description: Cleaned, validated copies of the Azure SQL brokerage source (built by notebook 04).
+    database: "{{ env_var('DBT_CATALOG', 'brokerage_dev') }}"
+    schema: silver
+    config:
+      loaded_at_field: _silver_loaded_at
+      freshness:
+        warn_after: {count: 26, period: hour}    # one missed daily run → warning
+        error_after: {count: 50, period: hour}   # two missed runs → error
+    tables:
+      - name: advisors
+      - name: clients
+      - name: accounts
