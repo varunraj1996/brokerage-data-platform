@@ -34,7 +34,7 @@ A brokerage and wealth-management data platform, built and **tested** the way a 
 
 ## Tech stack
 
-Databricks (Free Edition) · Delta Lake · PySpark · Structured Streaming · dbt · SQL Server · Python · pytest · Unity Catalog
+Databricks · Delta Lake · PySpark · Structured Streaming · dbt · Azure SQL Server · Python · pytest · Unity Catalog
 
 ## A note on the data
 
