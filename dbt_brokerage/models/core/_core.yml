@@ -51,3 +51,10 @@ models:
           - accepted_values:
               arguments:
                 values: ['Open', 'Closed']
+  - name: dim_date
+    description: "Calendar. Grain: one row per day, 2024-01-01 to 2025-12-31."
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+      - name: calendar_date
+        data_tests: [unique, not_null]
