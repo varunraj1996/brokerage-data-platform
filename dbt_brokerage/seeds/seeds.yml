@@ -1,0 +1,22 @@
+version: 2
+
+seeds:
+  - name: ref_universe
+    description: "The stocks this platform covers: 100 large US companies across all 11 sectors, plus SPY as the market benchmark."
+    config:
+      column_types:
+        ticker: string
+        company_name: string
+        sector: string
+        is_benchmark: boolean
+    columns:
+      - name: ticker
+        data_tests: [unique, not_null]
+      - name: sector
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Information Technology', 'Communication Services', 'Consumer Discretionary',
+                         'Consumer Staples', 'Health Care', 'Financials', 'Industrials', 'Energy',
+                         'Utilities', 'Real Estate', 'Materials', 'Benchmark']

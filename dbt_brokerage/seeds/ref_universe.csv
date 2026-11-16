@@ -1,0 +1,102 @@
+ticker,company_name,sector,is_benchmark
+AAPL,Apple,Information Technology,false
+MSFT,Microsoft,Information Technology,false
+NVDA,NVIDIA,Information Technology,false
+AVGO,Broadcom,Information Technology,false
+ORCL,Oracle,Information Technology,false
+CRM,Salesforce,Information Technology,false
+ADBE,Adobe,Information Technology,false
+AMD,Advanced Micro Devices,Information Technology,false
+CSCO,Cisco Systems,Information Technology,false
+INTC,Intel,Information Technology,false
+QCOM,Qualcomm,Information Technology,false
+TXN,Texas Instruments,Information Technology,false
+GOOGL,Alphabet,Communication Services,false
+META,Meta Platforms,Communication Services,false
+NFLX,Netflix,Communication Services,false
+DIS,Walt Disney,Communication Services,false
+T,AT&T,Communication Services,false
+VZ,Verizon Communications,Communication Services,false
+CMCSA,Comcast,Communication Services,false
+TMUS,T-Mobile US,Communication Services,false
+AMZN,Amazon.com,Consumer Discretionary,false
+TSLA,Tesla,Consumer Discretionary,false
+HD,Home Depot,Consumer Discretionary,false
+MCD,McDonald's,Consumer Discretionary,false
+NKE,Nike,Consumer Discretionary,false
+SBUX,Starbucks,Consumer Discretionary,false
+LOW,Lowe's,Consumer Discretionary,false
+BKNG,Booking Holdings,Consumer Discretionary,false
+TJX,TJX Companies,Consumer Discretionary,false
+CMG,Chipotle Mexican Grill,Consumer Discretionary,false
+WMT,Walmart,Consumer Staples,false
+PG,Procter & Gamble,Consumer Staples,false
+KO,Coca-Cola,Consumer Staples,false
+PEP,PepsiCo,Consumer Staples,false
+COST,Costco Wholesale,Consumer Staples,false
+PM,Philip Morris International,Consumer Staples,false
+MDLZ,Mondelez International,Consumer Staples,false
+CL,Colgate-Palmolive,Consumer Staples,false
+KMB,Kimberly-Clark,Consumer Staples,false
+UNH,UnitedHealth Group,Health Care,false
+JNJ,Johnson & Johnson,Health Care,false
+LLY,Eli Lilly,Health Care,false
+PFE,Pfizer,Health Care,false
+MRK,Merck & Co.,Health Care,false
+ABBV,AbbVie,Health Care,false
+TMO,Thermo Fisher Scientific,Health Care,false
+ABT,Abbott Laboratories,Health Care,false
+AMGN,Amgen,Health Care,false
+CVS,CVS Health,Health Care,false
+JPM,JPMorgan Chase,Financials,false
+BAC,Bank of America,Financials,false
+WFC,Wells Fargo,Financials,false
+GS,Goldman Sachs,Financials,false
+MS,Morgan Stanley,Financials,false
+C,Citigroup,Financials,false
+BLK,BlackRock,Financials,false
+SCHW,Charles Schwab,Financials,false
+AXP,American Express,Financials,false
+V,Visa,Financials,false
+MA,Mastercard,Financials,false
+CAT,Caterpillar,Industrials,false
+BA,Boeing,Industrials,false
+HON,Honeywell,Industrials,false
+GE,GE Aerospace,Industrials,false
+UPS,United Parcel Service,Industrials,false
+RTX,RTX,Industrials,false
+LMT,Lockheed Martin,Industrials,false
+DE,Deere & Company,Industrials,false
+UNP,Union Pacific,Industrials,false
+MMM,3M,Industrials,false
+XOM,Exxon Mobil,Energy,false
+CVX,Chevron,Energy,false
+COP,ConocoPhillips,Energy,false
+SLB,Schlumberger,Energy,false
+EOG,EOG Resources,Energy,false
+OXY,Occidental Petroleum,Energy,false
+PSX,Phillips 66,Energy,false
+MPC,Marathon Petroleum,Energy,false
+NEE,NextEra Energy,Utilities,false
+DUK,Duke Energy,Utilities,false
+SO,Southern Company,Utilities,false
+D,Dominion Energy,Utilities,false
+AEP,American Electric Power,Utilities,false
+EXC,Exelon,Utilities,false
+SRE,Sempra,Utilities,false
+PLD,Prologis,Real Estate,false
+AMT,American Tower,Real Estate,false
+EQIX,Equinix,Real Estate,false
+SPG,Simon Property Group,Real Estate,false
+O,Realty Income,Real Estate,false
+PSA,Public Storage,Real Estate,false
+CCI,Crown Castle,Real Estate,false
+LIN,Linde,Materials,false
+SHW,Sherwin-Williams,Materials,false
+APD,Air Products and Chemicals,Materials,false
+ECL,Ecolab,Materials,false
+FCX,Freeport-McMoRan,Materials,false
+NEM,Newmont,Materials,false
+DOW,Dow,Materials,false
+NUE,Nucor,Materials,false
+SPY,SPDR S&P 500 ETF Trust,Benchmark,true
