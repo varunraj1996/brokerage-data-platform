@@ -1,0 +1,10 @@
+snapshots:
+  - name: snp_security
+    description: >
+      Tracks changes to each company's identity over time. On every `dbt snapshot` (or `dbt build`), dbt compares
+      the current values with the last run; if any checked column changed, it closes the old version and opens a new one.
+    relation: ref('stg_securities')
+    config:
+      unique_key: cik                  # tickers can change; the SEC's CIK never does
+      strategy: check
+      check_cols: [ticker, legal_name, exchange, sic_code, sic_description, sector]

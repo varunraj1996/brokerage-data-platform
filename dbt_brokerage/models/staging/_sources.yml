@@ -14,3 +14,15 @@ sources:
       - name: advisors
       - name: clients
       - name: accounts
+      - name: daily_prices
+        description: Validated daily prices from Tiingo (notebook 06). A frozen 2024–2025 snapshot, so freshness is not checked.
+        config:
+          freshness: null
+      - name: securities
+        description: One row per universe ticker with its SEC identity (notebook 09).
+        config:
+          freshness: null      # refreshed on demand from SEC snapshots, not on a daily schedule yet
+      - name: security_name_history
+        description: Contiguous legal-name periods per company from SEC former names (notebook 09).
+        config:
+          freshness: null
