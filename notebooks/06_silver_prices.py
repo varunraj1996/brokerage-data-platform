@@ -174,3 +174,6 @@ display(gate)
 assert all(r[7] != "FAIL" for r in results), "❌ Gate bronze_to_silver (prices) FAILED. dbt must not run."
 print(f"✅ silver.daily_prices: in {rows_in:,} · valid {rows_valid:,} · duplicates {duplicates:,} · "
       f"rejected {rows_rejected:,} · tickers {tickers_valid}")
+
+# COMMAND ----------
+

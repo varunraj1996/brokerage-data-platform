@@ -33,3 +33,30 @@ models:
           - accepted_values:
               arguments:
                 values: ['Individual', 'Joint', 'IRA', 'Roth IRA']
+
+  - name: stg_daily_prices
+    description: One row per ticker per trading day, from silver.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [ticker, trade_date]
+    columns:
+      - name: ticker
+        data_tests: [not_null]
+      - name: trade_date
+        data_tests: [not_null]
+
+  - name: stg_securities
+    description: One row per universe ticker, current SEC identity.
+    columns:
+      - name: ticker
+        data_tests: [unique, not_null]
+      - name: cik
+        data_tests: [unique, not_null]
+
+  - name: stg_security_name_history
+    description: Legal-name periods per company (contiguous, no overlaps).
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [cik, valid_from]

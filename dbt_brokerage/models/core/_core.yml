@@ -51,6 +51,7 @@ models:
           - accepted_values:
               arguments:
                 values: ['Open', 'Closed']
+
   - name: dim_date
     description: "Calendar. Grain: one row per day, 2024-01-01 to 2025-12-31."
     columns:
@@ -58,3 +59,68 @@ models:
         data_tests: [unique, not_null]
       - name: calendar_date
         data_tests: [unique, not_null]
+      - name: is_trading_day
+        description: "True when the US market was open (SPY has a price that day)."
+        data_tests: [not_null]
+
+  - name: dim_security
+    description: "Securities. Grain: one row per company version (SCD2). History before the first snapshot comes from SEC former names; later changes from the dbt snapshot snp_security."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [cik, valid_from]
+    columns:
+      - name: security_sk
+        data_tests: [unique, not_null]
+      - name: cik
+        data_tests: [not_null]
+      - name: version_source
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['sec_name_history', 'dbt_snapshot']
+
+  - name: fct_daily_prices
+    description: "Daily prices. Grain: one row per security per trading day."
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [ticker, date_key]
+    columns:
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: security_sk
+        description: "The dim_security version valid on the trading day (as-of join)."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_security')
+                field: security_sk
+      - name: ticker
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ref_universe')
+                field: ticker
+      - name: close
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
+      - name: daily_price_return
+        description: "Day-over-day change in split-adjusted close (price only, no dividends)."
+        data_tests:
+          - dbt_utils.accepted_range:      # a move beyond ±50% in a day is almost certainly a data problem
+              arguments:
+                min_value: -0.5
+                max_value: 0.5
+              config:
+                severity: warn
