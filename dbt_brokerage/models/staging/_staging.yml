@@ -60,3 +60,14 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns: [cik, valid_from]
+
+  - name: stg_trades
+    description: One row per trade execution.
+    columns:
+      - name: trade_id
+        data_tests: [unique, not_null]
+      - name: side
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['BUY', 'SELL']

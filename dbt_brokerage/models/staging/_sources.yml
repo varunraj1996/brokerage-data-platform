@@ -26,3 +26,24 @@ sources:
         description: Contiguous legal-name periods per company from SEC former names (notebook 09).
         config:
           freshness: null
+      - name: trades
+        description: One row per trade execution, deduplicated and validated from the trade stream (notebook 13).
+        config:
+          freshness: null      # the stream runs on demand (cluster cost), not on a schedule yet
+
+  - name: sim
+    description: >
+      Ground truth written by the generator (notebook 10), before the stream adds duplicates and late events.
+      Used only by tests, never by models: it proves the pipeline delivered exactly what was generated.
+    database: "{{ env_var('DBT_CATALOG', 'brokerage_dev') }}"
+    schema: sim
+    tables:
+      - name: trades
+
+  - name: audit
+    description: Run evidence written by the notebooks.
+    database: "{{ env_var('DBT_CATALOG', 'brokerage_dev') }}"
+    schema: audit
+    tables:
+      - name: emit_manifest
+        description: One row per day of trade events emitted by notebook 11.
