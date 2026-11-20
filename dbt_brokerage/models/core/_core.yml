@@ -124,3 +124,49 @@ models:
                 max_value: 0.5
               config:
                 severity: warn
+
+  - name: fct_trades
+    description: >
+      Trade executions. Grain: one row per trade. Incremental (MERGE on trade_id), liquid-clustered on
+      trade_date and account_id. signed_quantity is + for buys and − for sells; cash_impact is the cash change.
+    columns:
+      - name: trade_id
+        data_tests: [unique, not_null]
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: account_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_account')
+                field: account_sk
+      - name: security_sk
+        description: "The dim_security version valid on the trade date (as-of join)."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_security')
+                field: security_sk
+      - name: side
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['BUY', 'SELL']
+      - name: quantity
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+      - name: price
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
