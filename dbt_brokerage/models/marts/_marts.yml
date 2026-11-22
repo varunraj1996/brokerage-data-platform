@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: mart_live_holdings_value
+    description: >
+      Clients' total holdings per stock, valued at the last historical close and at the latest live price.
+      Grain: one row per held stock. Live columns are null until a live session has seen that stock.
+      Note: assumes no stock split since the last historical close (the live feed is in today's share units).
+    columns:
+      - name: ticker
+        data_tests: [unique, not_null]
+      - name: shares_held
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
+
+  - name: mart_aum_daily
+    description: >
+      Assets under management per trading day × advisor × client segment, with the daily change split into
+      net new assets (client deposits − withdrawals) and market effect. Sum across advisors and segments on one
+      day for firm-wide AUM; never sum AUM across days.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [value_date, advisor_id, segment]
+    columns:
+      - name: aum
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0

@@ -71,3 +71,14 @@ models:
           - accepted_values:
               arguments:
                 values: ['BUY', 'SELL']
+
+  - name: stg_cash_ledger
+    description: One row per deposit or withdrawal.
+    columns:
+      - name: cash_txn_id
+        data_tests: [unique, not_null]
+      - name: txn_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['DEPOSIT', 'WITHDRAWAL']

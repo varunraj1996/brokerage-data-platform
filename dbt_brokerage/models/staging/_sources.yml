@@ -14,6 +14,8 @@ sources:
       - name: advisors
       - name: clients
       - name: accounts
+      - name: cash_ledger
+        description: Deposits and withdrawals from the Azure SQL cash ledger (notebook 04).
       - name: daily_prices
         description: Validated daily prices from Tiingo (notebook 06). A frozen 2024–2025 snapshot, so freshness is not checked.
         config:
@@ -24,6 +26,10 @@ sources:
           freshness: null      # refreshed on demand from SEC snapshots, not on a daily schedule yet
       - name: security_name_history
         description: Contiguous legal-name periods per company from SEC former names (notebook 09).
+        config:
+          freshness: null
+      - name: live_bars_1m
+        description: Live 1-minute bars from the Finnhub websocket (notebook 15). Only filled during live sessions.
         config:
           freshness: null
       - name: trades
@@ -39,6 +45,7 @@ sources:
     schema: sim
     tables:
       - name: trades
+      - name: cash_movements
 
   - name: audit
     description: Run evidence written by the notebooks.

@@ -13,6 +13,5 @@ models:
       +materialized: view     # thin layer on top of silver
     core:
       +materialized: table    # dimensions and facts
-
-flags:
-  send_anonymous_usage_stats: false
+    marts:
+      +materialized: view     # reporting views: always current, no storage
