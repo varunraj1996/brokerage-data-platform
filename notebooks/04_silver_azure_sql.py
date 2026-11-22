@@ -2,7 +2,7 @@
 # MAGIC %md
 # MAGIC # 04 · Silver: clean and validate Azure SQL data (slice 1)
 # MAGIC
-# MAGIC Takes the **latest bronze copy** of advisors, clients and accounts and produces **clean, trusted** silver tables.
+# MAGIC Takes the **latest bronze copy** of advisors, clients, accounts and the cash ledger and produces **clean, trusted** silver tables.
 # MAGIC
 # MAGIC | Step | What happens |
 # MAGIC |---|---|
@@ -13,7 +13,7 @@
 # MAGIC | 5 · Publish | `MERGE` the valid rows into silver (insert new, update changed, remove rows gone from the source) |
 # MAGIC
 # MAGIC This is **Write → Audit → Publish**: silver is only changed after the checks pass.
-# MAGIC Tables run parents first (advisors → clients → accounts) so foreign keys can be checked against silver.
+# MAGIC Tables run parents first (advisors → clients → accounts → cash_ledger) so foreign keys can be checked against silver.
 
 # COMMAND ----------
 
@@ -74,6 +74,16 @@ TABLES = [
             "closed_after_opened":   "closed_date IS NULL OR closed_date >= opened_date",
         },
         "foreign_keys": {"client_id": ("clients", "client_id")},
+    },
+    {
+        "name": "cash_ledger", "key": "cash_txn_id",
+        "rules": {
+            "cash_txn_id_not_null":     "cash_txn_id IS NOT NULL",
+            "txn_type_valid":           "txn_type IN ('DEPOSIT','WITHDRAWAL')",
+            "amount_positive":          "amount > 0",
+            "effective_date_in_window": "effective_date BETWEEN DATE'2024-01-01' AND DATE'2025-12-31'",
+        },
+        "foreign_keys": {"account_id": ("accounts", "account_id")},
     },
 ]
 
@@ -235,3 +245,6 @@ display(gate)
 failed_checks = [r for r in all_results if r[7] == "FAIL"]
 assert not failed_checks, f"❌ Gate bronze_to_silver FAILED: {len(failed_checks)} check(s). dbt must not run."
 print("✅ Gate bronze_to_silver passed")
+
+# COMMAND ----------
+

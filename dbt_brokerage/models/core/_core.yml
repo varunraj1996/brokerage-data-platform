@@ -170,3 +170,140 @@ models:
               arguments:
                 min_value: 0
                 inclusive: false
+
+  - name: fct_cash_movements
+    description: >
+      Every change to an account's cash balance. Grain: one row per movement. amount is signed (+ in, − out).
+      flow_type 'external' = deposits and withdrawals (excluded from returns); 'internal' = trades and fees.
+    columns:
+      - name: movement_id
+        data_tests: [unique, not_null]
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: account_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_account')
+                field: account_sk
+      - name: movement_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['DEPOSIT', 'WITHDRAWAL', 'BUY', 'SELL', 'FEE', 'DIVIDEND']
+      - name: flow_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['external', 'internal']
+
+  - name: fct_corporate_actions
+    description: >
+      Dividends and splits. Grain: one row per stock per event on its ex-date. cash_per_adjusted_share is the
+      dividend in today's share units (positions use these units); split_ratio is new shares per old share.
+    columns:
+      - name: action_id
+        data_tests: [unique, not_null]
+      - name: security_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_security')
+                field: security_sk
+      - name: action_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['DIVIDEND', 'SPLIT']
+      - name: cash_per_adjusted_share
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: false
+              config:
+                where: "action_type = 'DIVIDEND'"
+
+  - name: fct_daily_positions
+    description: >
+      Shares each account holds of each stock at the end of every trading day (periodic snapshot, carry-forward).
+      Grain: account × stock × trading day while held, plus the day it is sold out. SEMI-ADDITIVE: sum across
+      accounts or stocks on one day, never across days. dividend_cash = shares held the day before the ex-date ×
+      dividend per split-adjusted share.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [account_id, ticker, position_date]
+    columns:
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: account_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_account')
+                field: account_sk
+      - name: security_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_security')
+                field: security_sk
+      - name: shares_held
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+      - name: market_value
+        description: "shares_held × that day's split-adjusted close. Null would mean a missing price."
+        data_tests: [not_null]
+
+  - name: fct_daily_account_value
+    description: >
+      Each account's value at the end of every trading day, from its first deposit until it closes.
+      total_value = market_value + cash_balance. external_flow = deposits − withdrawals (not performance).
+      daily_pnl = total_value − yesterday's total_value − external_flow. Semi-additive across days.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [account_id, value_date]
+    columns:
+      - name: account_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_account')
+                field: account_sk
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: cash_balance
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -0.005
+      - name: total_value
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -0.005

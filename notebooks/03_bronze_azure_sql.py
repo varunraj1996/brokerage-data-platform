@@ -33,7 +33,8 @@ RUN_ID = str(uuid.uuid4())                 # one id for this whole run
 READ_PARTITIONS = 4                        # parallel connections to Azure SQL (free tier = 2 vCores)
 SOURCES = [("advisors", "advisor_id"),     # (table, primary key)
            ("clients",  "client_id"),
-           ("accounts", "account_id")]
+           ("accounts", "account_id"),
+           ("cash_ledger", "cash_txn_id")]
 
 print("Run:", RUN_ID)
 

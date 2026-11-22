@@ -33,6 +33,7 @@ TABLES = [
     ("brokerage.advisors", "advisors", "advisor_id", ("email",)),
     ("brokerage.clients",  "clients",  "client_id",  ("email", "phone", "ssn", "first_name", "last_name", "date_of_birth")),
     ("brokerage.accounts", "accounts", "account_id", ("account_number",)),
+    ("brokerage.cash_ledger", "cash_ledger", "cash_txn_id", ()),
 ]
 
 spark.sql(f"""
